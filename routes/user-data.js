@@ -1,0 +1,83 @@
+const express = require("express");
+const router = express.Router();
+const isAdminMiddleware = require("../middleware/is-admin.js");
+const isLoggedIn = require("../middleware/is-logged-in.js");
+
+const {
+  getUserData,
+  resetUserPassword,
+  modifyUserData,
+  getAllUsersData,
+  deleteUserData,
+  getUserPlans,
+} = require("../controllers/user-data.js");
+
+const { register } = require("../controllers/register.js");
+const userLogin = require("../controllers/login.js");
+const addNewPlan = require("../controllers/add-new-plan.js");
+const getPlan = require("../controllers/get-plan.js");
+const updatePlan = require("../controllers/update-plan.js");
+const deletePlan = require("../controllers/delete-plan.js");
+const verifyUser = require("../controllers/verify-user.js");
+const {
+  getUserDetails,
+} = require("../controllers/get-user-details.js");
+const {
+  getTransactions,
+  modifyUserTransaction,
+} = require("../controllers/get-transactions.js");
+const { upload } = require("../middleware/file-upload.js");
+const {
+  newUserTransaction,
+} = require("../controllers/transaction.js");
+const {
+  addMegaResalesPlan,
+  getMegaResalesPlan,
+} = require("../controllers/add-mega-resales.js");
+// USERS
+
+router.route("/register").post(register);
+router.route("/login").post(userLogin);
+router.route("/reset-password").post(resetUserPassword);
+router.route("/users").get(isLoggedIn, getUserDetails);
+router
+  .route("/transactions")
+  .get(isLoggedIn, getTransactions)
+  .post(isLoggedIn, upload.single("paymentFile"), newUserTransaction)
+  .patch(isAdminMiddleware, modifyUserTransaction);
+// .patch(isLoggedIn, modifyUserData);
+// router
+//   .route("/users/:id")
+//   .get(isLoggedIn, getUserData)
+//   .patch(isLoggedIn, modifyUserData);
+router
+  .route("/plans")
+  .post(isLoggedIn, addNewPlan)
+  .get(isLoggedIn, getUserPlans);
+
+router
+  .route("/mrp")
+  .post(isLoggedIn, addMegaResalesPlan)
+  .get(isLoggedIn, getMegaResalesPlan);
+// router.route("/transaction").post(isLoggedIn, newUserTransaction);
+
+router
+  .route("/plans/:id")
+  .get(getPlan)
+  .patch(updatePlan)
+  .delete(deletePlan);
+
+// VERIFY USER
+
+router.route("/verify-user").post(verifyUser);
+
+// ADMIN USE
+
+router.route("/get-all-users-data").get(getAllUsersData);
+// router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
+router.route("/delete-user-data/:id").delete(deleteUserData);
+// router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
+
+// PRODUCTION
+
+module.exports = router;
