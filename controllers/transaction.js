@@ -9,14 +9,25 @@ const newUserTransaction = asyncWrapper(async (req, res) => {
   const { userTransactionType } = req.query;
   const { txAmount, txMethod } = req.body;
 
+  const user = await User.findById(req.userId);
+
+  if (
+    userTransactionType == "Withdrawal" &&
+    user.accountBalance <= 0
+  ) {
+    throw new CustomAPIError("Insufficient Account Balance", 400);
+  }
   console.log(req.body);
   console.log(req.file);
 
-  if (!req.file) {
+  if (userTransactionType == "Deposit" && !req.file) {
     throw new CustomAPIError("Please upload a file", 400);
   }
 
-  const filePath = req.file.path;
+  const filePath =
+    userTransactionType == "Deposit"
+      ? req.file.path
+      : "Withdrawal Request";
 
   if (!["Withdrawal", "Deposit"].includes(userTransactionType)) {
     throw new CustomAPIError("Invalid userTransactionType", 400);
@@ -25,8 +36,6 @@ const newUserTransaction = asyncWrapper(async (req, res) => {
   if (!["Bitcoin", "Ethereum", "USDT", "Bank"].includes(txMethod)) {
     throw new CustomAPIError("Invalid txMethod", 400);
   }
-
-  const user = await User.findById(req.userId);
 
   if (txAmount <= 0) {
     throw new CustomAPIError("Amount must be more than zero", 400);

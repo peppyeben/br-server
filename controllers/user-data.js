@@ -2,12 +2,23 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const User = require("../models/user");
-// const {
-//   BasicGrowthPlan,
-//   StarterGrowthPlan,
-// } = require("../models/growth-plans/basic");
+const BasicGrowthPlan = require("../models/growth-plans/basic");
+const StarterGrowthPlan = require("../models/growth-plans/starter");
+const BronzeGrowthPlan = require("../models/growth-plans/bronze");
+const GoldGrowthPlan = require("../models/growth-plans/gold");
+const PremiumGrowthPlan = require("../models/growth-plans/premium");
+const VIPGrowthPlan = require("../models/vip-plans/vip");
 const { CustomAPIError } = require("../errors/custom-error");
 const asyncWrapper = require("../middleware/async");
+
+const modelMapping = {
+  BasicGrowthPlan: BasicGrowthPlan,
+  StarterGrowthPlan: StarterGrowthPlan,
+  BronzeGrowthPlan: BronzeGrowthPlan,
+  GoldGrowthPlan: GoldGrowthPlan,
+  PremiumGrowthPlan: PremiumGrowthPlan,
+  VIPGrowthPlan: VIPGrowthPlan,
+};
 
 // USERS
 
@@ -28,13 +39,39 @@ const getUserPlans = asyncWrapper(async (req, res, next) => {
     path: "selectedPlans",
   });
 
+  let plans = [];
+
+  // for (const key in user.selectedPlans) {
+  //   if (user.selectedPlans.hasOwnProperty(key)) {
+  //     const planArray = user.selectedPlans[key];
+
+  //     if (planArray.length > 0) {
+  //       const planName = planArray[0];
+
+  //       console.log(key);
+  //       console.log(planName);
+
+  //       const PlanModel = modelMapping[key];
+  //       const plan = await PlanModel.findById(planName);
+  //       plans.push(plan);
+  //     }
+  //   }
+  // }
+
   if (!user) {
     throw new CustomAPIError(`No user with ID: ${req.userId}`, 404);
   }
 
-  const plans = user.selectedPlans;
+  if (checkEmptyArrays(plans)) {
+    plans = [];
+  } else {
+    plans = user.selectedPlans;
+  }
 
-  res.status(200).json({ plans });
+  // const plans =
+  //   user.selectedPlans.length > 0 ? user.selectedPlans : [];
+
+  res.status(200).json({ plans, user });
 });
 
 const resetUserPassword = (req, res) => {
@@ -97,3 +134,15 @@ module.exports = {
   deleteUserData,
   getUserPlans,
 };
+
+function checkEmptyArrays(plans) {
+  for (const plan in plans) {
+    if (plans.hasOwnProperty(plan)) {
+      if (plans[plan].length === 0) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+}

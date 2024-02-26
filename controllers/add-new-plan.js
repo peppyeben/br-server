@@ -27,12 +27,12 @@ function isBoolean(str) {
 
 const addNewPlan = asyncWrapper(async (req, res) => {
   const { userPlanType, userAmount } = req.body;
-  const { isMegaResale } = req.query;
+  let { isMegaResale } = req.query;
   console.log(req.body);
   console.log(req.query);
 
   if (isMegaResale && !isBoolean(isMegaResale)) {
-    throw new CustomAPIError("Only Boolean Values acceopted", 400);
+    throw new CustomAPIError("Only Boolean Values accepted", 400);
   }
 
   const user = await User.findById(req.userId);
@@ -59,38 +59,38 @@ const addNewPlan = asyncWrapper(async (req, res) => {
   });
 
   let megaResalePlanOption;
-  if (isMegaResale) {
+  
+  if (typeof isMegaResale !== "undefined") {
     megaResalePlanOption = new MegaResalesPlan({
       investAmount: userAmount,
+      fullName: user.fullName,
     });
 
     await megaResalePlanOption.save();
 
-    const mrpID = megaResalePlanOption._id
+    const mrpID = megaResalePlanOption._id;
     user.megaResalePlans.push(mrpID);
-  }
+  } else {
+    let validationError = newPlan.validateSync();
+    console.log(validationError);
 
-  const validationError = newPlan.validateSync();
-  console.log(validationError);
+    if (validationError) {
+      console.log(validationError.errors["investAmount"].message);
+      throw new CustomAPIError("Amount out of Range", 400);
+    }
 
-  if (validationError) {
-    console.log(validationError.errors["investAmount"].message);
-    throw new CustomAPIError("Amount out of Range", 400);
-  }
+    await newPlan.save();
+    await newPlan.updateCurrentAmount();
 
-  await newPlan.save();
-  await newPlan.updateCurrentAmount();
-
-  const planId = newPlan._id;
-
-  if (!isMegaResale) {
+    const planId = newPlan._id;
     user.accountAffiliateCapital += Number(userAmount);
+    user.selectedPlans[userPlanType].push(planId);
   }
+
   user.accountBalance -= Number(userAmount);
 
-  user.selectedPlans[userPlanType].push(planId);
-
   await user.save();
+
   res.status(200).json({
     msg: "Successfully invested",
     plan: newPlan,

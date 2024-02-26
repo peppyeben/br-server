@@ -6,7 +6,6 @@ const isLoggedIn = require("../middleware/is-logged-in.js");
 const {
   getUserData,
   resetUserPassword,
-  modifyUserData,
   getAllUsersData,
   deleteUserData,
   getUserPlans,
@@ -34,12 +33,19 @@ const {
   addMegaResalesPlan,
   getMegaResalesPlan,
 } = require("../controllers/add-mega-resales.js");
+const modifyUserData = require("../controllers/modify-user-data.js");
+const {
+  getAllMegaResalesPlan,
+} = require("../controllers/get-all-mega-resales.js");
 // USERS
 
 router.route("/register").post(register);
 router.route("/login").post(userLogin);
 router.route("/reset-password").post(resetUserPassword);
-router.route("/users").get(isLoggedIn, getUserDetails);
+router
+  .route("/users")
+  .get(isLoggedIn, getUserDetails)
+  .patch(isLoggedIn, modifyUserData);
 router
   .route("/transactions")
   .get(isLoggedIn, getTransactions)
@@ -59,6 +65,8 @@ router
   .route("/mrp")
   .post(isLoggedIn, addMegaResalesPlan)
   .get(isLoggedIn, getMegaResalesPlan);
+
+router.route("/mrplans").get(isLoggedIn, getAllMegaResalesPlan);
 // router.route("/transaction").post(isLoggedIn, newUserTransaction);
 
 router

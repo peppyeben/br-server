@@ -4,7 +4,11 @@ const calculateReturns = require("../../utils/calculate-returns");
 
 const MegaResalesSchema = new mongoose.Schema({
   name: { type: String, default: "MegaResalesPlan" },
-  growthRate: { type: Number, default: 20.83 },
+  fullName: {
+    type: String,
+    required: true,
+  },
+  growthRate: { type: Number, default: 20.835 },
   currentAmount: { type: Number, default: 0 },
   duration: { type: Number, default: 48 },
   investAmount: {
@@ -74,17 +78,44 @@ MegaResalesSchema.methods.resume = function () {
 };
 
 MegaResalesSchema.methods.getCurrentAmount = function () {
-  if (Date.now() > this.createdAt().getTime() + 3600 * 48 * 1000) {
-    return (this.investAmount +=
-      this.investAmount * (this.growthRate / 100) * 48);
+  let currentAmount = this.currentAmount;
+  const currentTime = Date.now();
+  const elapsedTime = Math.floor(
+    currentTime - this.createdAt.getTime()
+    // (currentTime - this.createdAt.getTime()) / 1000
+  );
+  console.log("Elapsed Time", elapsedTime);
+  let newAmount;
+
+  if (elapsedTime >= 3600 * 48 * 1000) {
+    newAmount =
+      // this.investAmount +
+      this.investAmount * (this.growthRate / 100) * 48;
+  } else {
+    const hoursElapsed = Math.floor(elapsedTime / (3600 * 1000));
+    console.log("Hours Elapsed", hoursElapsed);
+    newAmount =
+      // this.investAmount +
+      this.investAmount * (this.growthRate / 100) * hoursElapsed;
   }
 
-  return (this.investAmount +=
-    this.investAmount *
-    Math.floor(
-      (Date.now() - this.createdAt().getTime()) / (3600 * 1000)
-    ));
+  // Update the currentAmount property of the model
+  this.currentAmount = newAmount;
+  return this.save(); // Save the updated model to the database
 };
+
+// MegaResalesSchema.methods.getCurrentAmount = function () {
+//   if (Date.now() > this.createdAt.getTime() + 3600 * 48 * 1000) {
+//     return (this.investAmount +=
+//       this.investAmount * (this.growthRate / 100) * 48);
+//   }
+
+//   return (this.investAmount +=
+//     this.investAmount *
+//     Math.floor(
+//       (Date.now() - this.createdAt.getTime()) / (3600 * 1000)
+//     ));
+// };
 
 const MegaResalesPlan = mongoose.model(
   "MegaResalesPlan",

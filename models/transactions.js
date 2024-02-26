@@ -17,7 +17,6 @@ const TransactionSchema = new mongoose.Schema({
   },
   paymentFile: {
     type: String,
-    required: [true, "Payment proof is needed"],
   },
   createdAt: {
     type: Date,

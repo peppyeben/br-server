@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/user");
 const MegaResalesPlan = require("../models/vip-plans/mega-resales");
 const { CustomAPIError } = require("../errors/custom-error");
@@ -24,8 +25,10 @@ const addMegaResalesPlan = asyncWrapper(async (req, res) => {
     throw new CustomAPIError("Amount must be more than zero", 400);
   }
 
+  console.log(user);
   const newPlan = new MegaResalesPlan({
     investAmount: userAmount,
+    fullName: String(user.fullName),
   });
 
   const validationError = newPlan.validateSync();
@@ -49,6 +52,7 @@ const addMegaResalesPlan = asyncWrapper(async (req, res) => {
   res
     .status(200)
     .json({ msg: "Successfully invested", plan: newPlan, user });
+  // .json({ msg: "Successfully invested"});
 });
 
 const getMegaResalesPlan = asyncWrapper(async (req, res) => {
@@ -69,12 +73,27 @@ const getMegaResalesPlan = asyncWrapper(async (req, res) => {
     _id: { $in: user.megaResalePlans },
   });
 
+  let mMRP = [];
+
+  for (const userMRPDocument of userMRP) {
+    const model = await MegaResalesPlan.findById(userMRPDocument._id);
+    await model.getCurrentAmount();
+
+    mMRP.push(model);
+  }
+
+  // await userMRP.getCurrentAmount()
+  // let resPlan = await mongoose.model(userMRP);
+  // await resPlan.getCurrentAmount();
+
   if (!userMRP) {
     throw new CustomAPIError("Couldn't get MRP", 400);
   }
 
   res.status(200).json({
-    MRP: userMRP,
+    // MRP: userMRP,
+    MRP: mMRP,
+    // resPlan
   });
 });
 

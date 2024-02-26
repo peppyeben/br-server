@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const countries = require("../utils/countries");
+const niches = require("../utils/niches");
 
 const UserSchema = new mongoose.Schema({
   accountEmail: {
@@ -46,6 +47,24 @@ const UserSchema = new mongoose.Schema({
     unique: [true, "Unique refID needed"],
     required: [true, "refID needed"],
   },
+  accountNiche: { type: String, enum: niches, default: "" },
+  accountNicheStatus: {
+    type: String,
+    enum: ["Inactive", "Pending", "Active"],
+    default: "Inactive",
+  },
+  accountSmartLink: {
+    type: String,
+    enum: ["Inactive", "Pending", "Active"],
+    default: "Inactive",
+  },
+  accountSmartLinkAmount: { type: Number, default: 0 },
+  accountAdvert: {
+    type: String,
+    enum: ["Inactive", "Pending", "Active"],
+    default: "Inactive",
+  },
+  accountAdvertAmount: { type: Number, default: 0 },
   accountBalance: { type: Number, default: 0 },
   accountAffiliateBalance: { type: Number, default: 0 },
   accountAffiliateCapital: { type: Number, default: 0 },
