@@ -48,17 +48,16 @@ const newUserTransaction = asyncWrapper(async (req, res) => {
     paymentFile: filePath,
   });
 
-  console.log(newTransaction);
+  //   console.log(newTransaction);
   newTransaction.userId = req.userId;
 
-  //   await newTransaction.save();
   await newTransaction.save();
 
-  // const txId = newTransaction._id;
+  const txId = newTransaction._id;
 
-  // user.userTransactions[userTransactionType].push(txId);
+  user.userTransactions[userTransactionType].push(txId);
 
-  // await user.save();
+  await user.save();
   res.status(200).json({
     msg: "Transaction Added",
     plan: newTransaction,

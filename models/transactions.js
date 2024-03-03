@@ -36,6 +36,9 @@ TransactionSchema.virtual("userId")
 
 TransactionSchema.pre("save", async function (next) {
   try {
+    if (this.txType == "Deposit") {
+      return next();
+    }
     const userId = this.userId;
 
     const user = await User.findById(userId);
