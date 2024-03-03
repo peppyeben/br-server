@@ -24,4 +24,13 @@ const TransactionSchema = new mongoose.Schema({
   },
 });
 
+TransactionSchema.pre("save", async function (next) {
+  try {
+    
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model("Transaction", TransactionSchema);
