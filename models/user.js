@@ -80,6 +80,7 @@ const UserSchema = new mongoose.Schema({
   isAMCPaid: { type: Boolean, default: false },
   isEquityAvailable: { type: Boolean, default: false },
   isReflectionFeePaid: { type: Boolean, default: false },
+  isSwitchTransferFeePaid: { type: Boolean, default: false },
   isDistributionFeePaid: { type: Boolean, default: false },
   isSpreadFeePaid: { type: Boolean, default: false },
   isRecommitmentFeePaid: { type: Boolean, default: false },
