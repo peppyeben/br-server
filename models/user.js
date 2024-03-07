@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcrypt");
 
 const countries = require("../utils/countries");
 const niches = require("../utils/niches");
