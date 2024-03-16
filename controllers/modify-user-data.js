@@ -48,7 +48,8 @@ const modifyUserData = asyncWrapper(async (req, res) => {
       modifiedData.accountNiche = userModifiedData.accountNiche;
     }
   }
-
+  // if (userModifiedData.accountNiche) {
+  // }
   if (!isNotEmpty(modifiedData)) {
     throw new CustomAPIError(`Can't modify empty object`, 404);
   }

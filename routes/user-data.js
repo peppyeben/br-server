@@ -34,6 +34,7 @@ const {
   getMegaResalesPlan,
 } = require("../controllers/add-mega-resales.js");
 const modifyUserData = require("../controllers/modify-user-data.js");
+const modifyUserDataAdmin = require("../controllers/admin/modify-user-data.js");
 const {
   getAllMegaResalesPlan,
 } = require("../controllers/get-all-mega-resales.js");
@@ -51,11 +52,7 @@ router
   .get(isLoggedIn, getTransactions)
   .post(isLoggedIn, upload.single("paymentFile"), newUserTransaction)
   .patch(isAdminMiddleware, modifyUserTransaction);
-// .patch(isLoggedIn, modifyUserData);
-// router
-//   .route("/users/:id")
-//   .get(isLoggedIn, getUserData)
-//   .patch(isLoggedIn, modifyUserData);
+
 router
   .route("/plans")
   .post(isLoggedIn, addNewPlan)
@@ -85,6 +82,9 @@ router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
+router
+  .route("/modify-user-data-admin")
+  .patch(isAdminMiddleware, modifyUserDataAdmin);
 
 // PRODUCTION
 

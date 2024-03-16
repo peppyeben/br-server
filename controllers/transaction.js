@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const Transaction = require("../models/transactions");
-// const { upload } = require("../middleware/file-upload");
 
 const { CustomAPIError } = require("../errors/custom-error");
 const asyncWrapper = require("../middleware/async");
