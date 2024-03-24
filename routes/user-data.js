@@ -13,6 +13,7 @@ const {
 
 const { register } = require("../controllers/register.js");
 const userLogin = require("../controllers/login.js");
+const getUserReferrals = require("../controllers/get-referrals");
 const addNewPlan = require("../controllers/add-new-plan.js");
 const getPlan = require("../controllers/get-plan.js");
 const updatePlan = require("../controllers/update-plan.js");
@@ -34,7 +35,6 @@ const {
   getMegaResalesPlan,
 } = require("../controllers/add-mega-resales.js");
 const modifyUserData = require("../controllers/modify-user-data.js");
-const modifyUserDataAdmin = require("../controllers/admin/modify-user-data.js");
 const {
   getAllMegaResalesPlan,
 } = require("../controllers/get-all-mega-resales.js");
@@ -64,7 +64,7 @@ router
   .get(isLoggedIn, getMegaResalesPlan);
 
 router.route("/mrplans").get(isLoggedIn, getAllMegaResalesPlan);
-// router.route("/transaction").post(isLoggedIn, newUserTransaction);
+router.route("/referrals").get(isLoggedIn, getUserReferrals);
 
 router
   .route("/plans/:id")
@@ -78,13 +78,10 @@ router.route("/verify-user").post(verifyUser);
 
 // ADMIN USE
 
-router.route("/get-all-users-data").get(getAllUsersData);
+// router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
-router
-  .route("/modify-user-data-admin")
-  .patch(isAdminMiddleware, modifyUserDataAdmin);
 
 // PRODUCTION
 

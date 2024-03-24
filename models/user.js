@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   accountPassword: {
     type: String,
     required: [true, "Must provide password"],
+    maxlength: [60, "password cannot be more than 35 characters"],
   },
   accountPhoneNumber: {
     type: Number,
