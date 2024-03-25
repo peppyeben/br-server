@@ -17,11 +17,11 @@ const getUserReferrals = asyncWrapper(async (req, res, next) => {
   const refIDs = user.userReferrals;
 
   if (refIDs.length < 1) {
-    return res.status(200).json([]);
+    return res.status(200).json({ referrer: [] });
   }
 
   const referrer = await User.find(
-    { refID: { $in: refArray.map(Number) } },
+    { refID: { $in: refIDs.map(Number) } },
     { createdAt: 1, fullName: 1, refID: 1 }
   );
 

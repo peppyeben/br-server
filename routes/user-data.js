@@ -38,6 +38,8 @@ const modifyUserData = require("../controllers/modify-user-data.js");
 const {
   getAllMegaResalesPlan,
 } = require("../controllers/get-all-mega-resales.js");
+const forgotPassword = require("../controllers/forgot-passsword.js");
+const changePassword = require("../controllers/change-password.js");
 // USERS
 
 router.route("/register").post(register);
@@ -72,13 +74,16 @@ router
   .patch(updatePlan)
   .delete(deletePlan);
 
+router.route("/password").post(forgotPassword);
+router.route("/change-password").post(changePassword);
+
 // VERIFY USER
 
 router.route("/verify-user").post(verifyUser);
 
 // ADMIN USE
 
-// router.route("/get-all-users-data").get(getAllUsersData);
+router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);

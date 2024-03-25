@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-// const bcrypt = require("bcrypt");
 
 const countries = require("../utils/countries");
 const niches = require("../utils/niches");
@@ -23,7 +22,7 @@ const UserSchema = new mongoose.Schema({
   accountPassword: {
     type: String,
     required: [true, "Must provide password"],
-    maxlength: [60, "password cannot be more than 35 characters"],
+    maxlength: [90, "password cannot be more than 90 characters"],
   },
   accountPhoneNumber: {
     type: Number,
@@ -49,6 +48,8 @@ const UserSchema = new mongoose.Schema({
     unique: [true, "Unique refID needed"],
     required: [true, "refID needed"],
   },
+  resetPasswordToken: { type: String, default: "" },
+  resetPasswordExpires: { type: Date, default: Date.now },
   accountNiche: { type: String, enum: niches, default: "" },
   accountNicheStatus: {
     type: String,
@@ -105,7 +106,10 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre("save", async function (next) {
   try {
-    if (!this.accountPassword.startsWith("$2b$")) {
+    if (
+      !this.accountPassword.startsWith("$2b$") &&
+      !this.accountPassword.startsWith("$2a$")
+    ) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(
         this.accountPassword,

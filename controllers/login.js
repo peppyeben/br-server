@@ -21,7 +21,7 @@ const userLogin = asyncWrapper(async (req, res) => {
   console.log(user.accountPassword);
 
   if (!isPasswordValid) {
-    throw new CustomAPIError("Invalid Password", 401);
+    throw new CustomAPIError("Incorrect Password", 401);
   }
 
   const token = jwt.sign(

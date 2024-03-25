@@ -79,6 +79,8 @@ const register = asyncWrapper(async (req, res) => {
     if (referrer) {
       referrer.userReferrals.push(refID);
     }
+
+    referrer.save();
   }
 
   let user = new User({
