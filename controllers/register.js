@@ -49,10 +49,10 @@ const register = asyncWrapper(async (req, res) => {
     throw new CustomAPIError("Invalid email format", 400);
   }
 
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/;
   if (!passwordRegex.test(password)) {
     throw new CustomAPIError(
-      "Password must be at least 8 characters and contain at least one letter and one number",
+      "Password must be at least 8 characters and contain at least one letter, one number, and can include special characters",
       400
     );
   }

@@ -40,6 +40,8 @@ const {
 } = require("../controllers/get-all-mega-resales.js");
 const forgotPassword = require("../controllers/forgot-passsword.js");
 const changePassword = require("../controllers/change-password.js");
+const modifyAdvertFee = require("../controllers/advert-fee.js");
+const getTransactionAdmin = require("../controllers/admin/get-transactions.js");
 // USERS
 
 router.route("/register").post(register);
@@ -81,13 +83,20 @@ router.route("/change-password").post(changePassword);
 
 router.route("/verify-user").post(verifyUser);
 
+// router.route("/verify-user").post(verifyUser);
+
 // ADMIN USE
 
 router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
+router
+  .route("/advert-fee/:id")
+  .patch(isAdminMiddleware, modifyAdvertFee);
 
+router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
+// .get(isLoggedIn, isAdminMiddleware, getTransactions);
 // PRODUCTION
 
 module.exports = router;

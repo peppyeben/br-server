@@ -6,7 +6,9 @@ const { CustomAPIError } = require("../errors/custom-error");
 const userLogin = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
-  const user = await User.findOne({ accountEmail: email }).exec();
+  const user = await User.findOne({
+    accountEmail: String(email).toLowerCase(),
+  }).exec();
 
   if (!user) {
     throw new CustomAPIError("User doesn't Exist", 401);
