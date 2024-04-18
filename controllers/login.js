@@ -7,7 +7,7 @@ const userLogin = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   const user = await User.findOne({
-    accountEmail: String(email).toLowerCase(),
+    accountEmail: new RegExp("^" + email + "$", "i"),
   }).exec();
 
   if (!user) {

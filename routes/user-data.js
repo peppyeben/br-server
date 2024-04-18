@@ -19,17 +19,13 @@ const getPlan = require("../controllers/get-plan.js");
 const updatePlan = require("../controllers/update-plan.js");
 const deletePlan = require("../controllers/delete-plan.js");
 const verifyUser = require("../controllers/verify-user.js");
-const {
-  getUserDetails,
-} = require("../controllers/get-user-details.js");
+const { getUserDetails } = require("../controllers/get-user-details.js");
 const {
   getTransactions,
   modifyUserTransaction,
 } = require("../controllers/get-transactions.js");
 const { upload } = require("../middleware/file-upload.js");
-const {
-  newUserTransaction,
-} = require("../controllers/transaction.js");
+const { newUserTransaction } = require("../controllers/transaction.js");
 const {
   addMegaResalesPlan,
   getMegaResalesPlan,
@@ -42,6 +38,9 @@ const forgotPassword = require("../controllers/forgot-passsword.js");
 const changePassword = require("../controllers/change-password.js");
 const modifyAdvertFee = require("../controllers/advert-fee.js");
 const getTransactionAdmin = require("../controllers/admin/get-transactions.js");
+const modifyTransactionAdmin = require("../controllers/admin/modify-transactions.js");
+const modifyWithdrawalChecklist = require("../controllers/admin/withdrawal-checklist.js");
+const getUserDetailsAdmin = require("../controllers/admin/get-user.js");
 // USERS
 
 router.route("/register").post(register);
@@ -70,11 +69,7 @@ router
 router.route("/mrplans").get(isLoggedIn, getAllMegaResalesPlan);
 router.route("/referrals").get(isLoggedIn, getUserReferrals);
 
-router
-  .route("/plans/:id")
-  .get(getPlan)
-  .patch(updatePlan)
-  .delete(deletePlan);
+router.route("/plans/:id").get(getPlan).patch(updatePlan).delete(deletePlan);
 
 router.route("/password").post(forgotPassword);
 router.route("/change-password").post(changePassword);
@@ -91,11 +86,15 @@ router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
-router
-  .route("/advert-fee/:id")
-  .patch(isAdminMiddleware, modifyAdvertFee);
+router.route("/advert-fee/:id").patch(isAdminMiddleware, modifyAdvertFee);
 
 router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
+router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);
+router
+  .route("/modify-withdrawal-checklist")
+  .patch(isAdminMiddleware, modifyWithdrawalChecklist);
+
+router.route("/get-user-by-id").get(isAdminMiddleware, getUserDetailsAdmin);
 // .get(isLoggedIn, isAdminMiddleware, getTransactions);
 // PRODUCTION
 
