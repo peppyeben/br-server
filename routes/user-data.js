@@ -36,11 +36,13 @@ const {
 } = require("../controllers/get-all-mega-resales.js");
 const forgotPassword = require("../controllers/forgot-passsword.js");
 const changePassword = require("../controllers/change-password.js");
-const modifyAdvertFee = require("../controllers/advert-fee.js");
+const modifyAdvertFee = require("../controllers/admin/advert-fee.js");
 const getTransactionAdmin = require("../controllers/admin/get-transactions.js");
 const modifyTransactionAdmin = require("../controllers/admin/modify-transactions.js");
 const modifyWithdrawalChecklist = require("../controllers/admin/withdrawal-checklist.js");
 const getUserDetailsAdmin = require("../controllers/admin/get-user.js");
+const modifySmartLink = require("../controllers/admin/smartlink.js");
+const modifyNiche = require("../controllers/admin/niche.js");
 // USERS
 
 router.route("/register").post(register);
@@ -87,6 +89,8 @@ router.route("/get-all-users-data").get(getAllUsersData);
 router.route("/delete-user-data/:id").delete(deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
 router.route("/advert-fee/:id").patch(isAdminMiddleware, modifyAdvertFee);
+router.route("/smartlink/:id").patch(isAdminMiddleware, modifySmartLink);
+router.route("/niche/:id").patch(isAdminMiddleware, modifyNiche);
 
 router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
 router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);

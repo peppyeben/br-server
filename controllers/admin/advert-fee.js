@@ -1,6 +1,6 @@
-const User = require("../models/user");
-const { CustomAPIError } = require("../errors/custom-error");
-const asyncWrapper = require("../middleware/async");
+const User = require("../../models/user");
+const { CustomAPIError } = require("../../errors/custom-error");
+const asyncWrapper = require("../../middleware/async");
 
 const modifyAdvertFee = asyncWrapper(async (req, res) => {
   const { id } = req.params;
