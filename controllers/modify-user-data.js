@@ -17,9 +17,15 @@ const modifyUserData = asyncWrapper(async (req, res) => {
   const user = await User.findById(req.userId);
 
   if (!user) {
-    return next(
-      new CustomAPIError(`No user with ID: ${req.userId}`, 404)
-    );
+    return next(new CustomAPIError(`No user with ID: ${req.userId}`, 404));
+  }
+
+  if (userModifiedData.accountGiftBoxStatus == "Pending") {
+    modifiedData.accountGiftBoxStatus = "Pending";
+  }
+
+  if (userModifiedData.accountGiftBoxStatus == "Inactive") {
+    modifiedData.accountGiftBoxStatus = "Inactive";
   }
 
   if (userModifiedData.accountSmartLink == "Pending") {

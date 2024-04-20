@@ -61,6 +61,11 @@ const UserSchema = new mongoose.Schema({
     enum: ["Inactive", "Pending", "Active"],
     default: "Inactive",
   },
+  accountGiftBoxStatus: {
+    type: String,
+    enum: ["Inactive", "Pending", "Active"],
+    default: "Inactive",
+  },
   accountSmartLinkAmount: { type: Number, default: 0 },
   accountAdvert: {
     type: String,
@@ -111,10 +116,7 @@ UserSchema.pre("save", async function (next) {
       !this.accountPassword.startsWith("$2a$")
     ) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(
-        this.accountPassword,
-        salt
-      );
+      const hashedPassword = await bcrypt.hash(this.accountPassword, salt);
       this.accountPassword = hashedPassword;
     }
     next();

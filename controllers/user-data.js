@@ -112,14 +112,14 @@ const getAllUsersData = asyncWrapper(async (req, res) => {
   });
 });
 
-const deleteUserData = asyncWrapper(async (req, res) => {
+const deleteUserData = asyncWrapper(async (req, res, next) => {
   const { id: userID } = req.params;
   const user = await User.findOneAndDelete({ _id: userID });
 
   if (!user) {
     // return next(createCustomError(`No user with ID: ${userID}`, 404));
     return next(
-      new CustomAPIError(`No user with ID: ${userID}`, 404)
+      new CustomAPIError(`User not Found: ${userID}`, 404)
     );
   }
 

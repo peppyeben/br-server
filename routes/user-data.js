@@ -44,6 +44,7 @@ const getUserDetailsAdmin = require("../controllers/admin/get-user.js");
 const modifySmartLink = require("../controllers/admin/smartlink.js");
 const modifyNiche = require("../controllers/admin/niche.js");
 const modifyUserAdmin = require("../controllers/admin/modify-user.js");
+const getUserTransactionAdmin = require("../controllers/admin/get-user-transactions.js");
 // USERS
 
 router.route("/register").post(register);
@@ -87,12 +88,13 @@ router.route("/verify-user").post(verifyUser);
 
 router.route("/get-all-users-data").get(getAllUsersData);
 // router.route("/get-all-users-data").get(isAdminMiddleware, getAllUsersData);
-router.route("/delete-user-data/:id").delete(deleteUserData);
+router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
 // router.route("/delete-user-data/:id").delete(isAdminMiddleware, deleteUserData);
 router.route("/advert-fee/:id").patch(isAdminMiddleware, modifyAdvertFee);
 router.route("/smartlink/:id").patch(isAdminMiddleware, modifySmartLink);
 router.route("/niche/:id").patch(isAdminMiddleware, modifyNiche);
 router.route("/modify-user/:id").patch(isAdminMiddleware, modifyUserAdmin);
+router.route("/user-tx/:id").get(isAdminMiddleware, getUserTransactionAdmin);
 
 router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
 router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);
