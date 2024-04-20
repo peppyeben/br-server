@@ -43,6 +43,7 @@ const modifyWithdrawalChecklist = require("../controllers/admin/withdrawal-check
 const getUserDetailsAdmin = require("../controllers/admin/get-user.js");
 const modifySmartLink = require("../controllers/admin/smartlink.js");
 const modifyNiche = require("../controllers/admin/niche.js");
+const modifyUserAdmin = require("../controllers/admin/modify-user.js");
 // USERS
 
 router.route("/register").post(register);
@@ -91,6 +92,7 @@ router.route("/delete-user-data/:id").delete(deleteUserData);
 router.route("/advert-fee/:id").patch(isAdminMiddleware, modifyAdvertFee);
 router.route("/smartlink/:id").patch(isAdminMiddleware, modifySmartLink);
 router.route("/niche/:id").patch(isAdminMiddleware, modifyNiche);
+router.route("/modify-user/:id").patch(isAdminMiddleware, modifyUserAdmin);
 
 router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
 router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);
