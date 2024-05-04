@@ -27,14 +27,14 @@ const getPlan = asyncWrapper(async (req, res) => {
   if (!plan) {
     throw new CustomAPIError("Plan doesn't exist", 400);
   }
-  
-  await plan.updateCurrentAmount();
+
+  const currentAmount = await plan.getCurrentAmount();
 
   res.status(200).json({
     planDetails: {
       plan,
       isActive: plan.isActive,
-      currentAmount: plan.currentAmount,
+      currentAmount,
     },
   });
 });

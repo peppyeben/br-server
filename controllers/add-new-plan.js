@@ -37,10 +37,7 @@ const addNewPlan = asyncWrapper(async (req, res) => {
 
   const user = await User.findById(req.userId);
 
-  if (
-    user.accountBalance <= 0 ||
-    user.accountBalance < Number(userAmount)
-  ) {
+  if (user.accountBalance <= 0 || user.accountBalance < Number(userAmount)) {
     throw new CustomAPIError("Insufficient Balance to Invest", 400);
   }
 
@@ -59,7 +56,7 @@ const addNewPlan = asyncWrapper(async (req, res) => {
   });
 
   let megaResalePlanOption;
-  
+
   if (typeof isMegaResale !== "undefined") {
     megaResalePlanOption = new MegaResalesPlan({
       investAmount: userAmount,
@@ -80,7 +77,7 @@ const addNewPlan = asyncWrapper(async (req, res) => {
     }
 
     await newPlan.save();
-    await newPlan.updateCurrentAmount();
+    // await newPlan.updateCurrentAmount();
 
     const planId = newPlan._id;
     user.accountAffiliateCapital += Number(userAmount);

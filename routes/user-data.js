@@ -73,7 +73,11 @@ router
 router.route("/mrplans").get(isLoggedIn, getAllMegaResalesPlan);
 router.route("/referrals").get(isLoggedIn, getUserReferrals);
 
-router.route("/plans/:id").get(getPlan).patch(updatePlan).delete(deletePlan);
+router
+  .route("/plans/:id")
+  .get(getPlan)
+  .patch(updatePlan)
+  .delete(isAdminMiddleware, deletePlan);
 
 router.route("/password").post(forgotPassword);
 router.route("/change-password").post(changePassword);
@@ -97,7 +101,7 @@ router.route("/modify-user/:id").patch(isAdminMiddleware, modifyUserAdmin);
 router.route("/user-tx/:id").get(isAdminMiddleware, getUserTransactionAdmin);
 
 router.route("/admin-tx").get(isAdminMiddleware, getTransactionAdmin);
-router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);
+// router.route("/modify-tx").patch(isAdminMiddleware, modifyTransactionAdmin);
 router
   .route("/modify-withdrawal-checklist")
   .patch(isAdminMiddleware, modifyWithdrawalChecklist);

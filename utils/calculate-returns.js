@@ -1,13 +1,5 @@
 let startTimeStringFromMongoDB = "2024-01-21T05:19:23.140Z";
 
-// let activeHours = [2];
-// let startTime = new Date(startTimeStringFromMongoDB);
-// let pauseTime = null;
-// let isActive = false;
-// let investAmount = 100;
-// let growthRate = 100;
-// let currentAmount = 0;
-
 const calcReturn = (
   startTime,
   investAmount,
@@ -17,14 +9,10 @@ const calcReturn = (
 ) => {
   if (isActive) {
     const timeDiff = Math.floor(
-      (new Date().getTime() - new Date(startTime).getTime()) /
-        (60 * 60 * 1000)
+      (new Date().getTime() - new Date(startTime).getTime()) / (60 * 60 * 1000)
     );
 
-    const activeHoursSum = activeHours.reduce(
-      (sum, hours) => sum + hours,
-      0
-    );
+    const activeHoursSum = activeHours.reduce((sum, hours) => sum + hours, 0);
 
     const totalTime = timeDiff + activeHoursSum;
 
@@ -32,10 +20,7 @@ const calcReturn = (
     currentAmount = investAmount + ret;
     return currentAmount;
   } else {
-    const activeHoursSum = activeHours.reduce(
-      (sum, hours) => sum + hours,
-      0
-    );
+    const activeHoursSum = activeHours.reduce((sum, hours) => sum + hours, 0);
 
     const ret = investAmount * (growthRate / 100) * activeHoursSum;
     currentAmount = investAmount + ret;
@@ -62,10 +47,5 @@ const resume = () => {
 
   startTime = new Date(startTime).toISOString();
 };
-// calcReturn();
-// pause();
-// calcReturn();
-// resume();
-// calcReturn();
-// console.log(currentAmount);
+
 module.exports = calcReturn;
