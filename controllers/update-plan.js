@@ -18,8 +18,7 @@ const modelMapping = {
 
 const updatePlan = asyncWrapper(async (req, res) => {
   const { id } = req.params;
-  const { planType, growthRate, maxInvestAmount, isActive } =
-    req.query;
+  const { planType, growthRate, maxInvestAmount, isActive } = req.body;
 
   if (!planType || (!growthRate && !maxInvestAmount)) {
     throw new CustomAPIError("Invalid input", 400);
@@ -30,30 +29,26 @@ const updatePlan = asyncWrapper(async (req, res) => {
   if (!Model) {
     throw new CustomAPIError(`Invalid planType: ${planType}`, 400);
   }
+
   const plan = await Model.findById(id);
 
   const updateObj = {};
 
   if (growthRate) {
     updateObj.growthRate = parseFloat(growthRate);
+    await plan.modifyGrowthRate(updateObj.growthRate);
   }
-  const planStatus = await plan.isActive;
 
-  if (planStatus.toString() != isActive.toString()) {
-    if (isActive == "true") {
+  if (isActive !== undefined && plan.isActive !== isActive) {
+    if (isActive === "true") {
       await plan.resume();
-    }
-
-    if (isActive == "false") {
+    } else if (isActive === "false") {
       await plan.pause();
     }
+    updateObj.isActive = isActive;
   }
 
-  await plan.updateCurrentAmount();
-  const userPlan = await Model.updateOne(
-    { _id: id },
-    { $set: updateObj }
-  );
+  const userPlan = await Model.updateOne({ _id: id }, { $set: updateObj });
 
   res.status(200).json({ msg: "Success", userPlan, updateObj });
 });

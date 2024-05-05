@@ -76,7 +76,7 @@ router.route("/referrals").get(isLoggedIn, getUserReferrals);
 router
   .route("/plans/:id")
   .get(getPlan)
-  .patch(updatePlan)
+  .patch(isAdminMiddleware, updatePlan)
   .delete(isAdminMiddleware, deletePlan);
 
 router.route("/password").post(forgotPassword);
