@@ -20,8 +20,12 @@ const updatePlan = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const { planType, growthRate, maxInvestAmount, isActive } = req.body;
 
-  if (!planType || (!growthRate && !maxInvestAmount)) {
-    throw new CustomAPIError("Invalid input", 400);
+  if (!planType) {
+    throw new CustomAPIError("Invalid Plan Type", 400);
+  }
+
+  if (!growthRate && !maxInvestAmount) {
+    throw new CustomAPIError("Invalid mods", 400);
   }
 
   const Model = modelMapping[planType];
@@ -49,6 +53,7 @@ const updatePlan = asyncWrapper(async (req, res) => {
   }
 
   const userPlan = await Model.updateOne({ _id: id }, { $set: updateObj });
+  await plan.save();
 
   res.status(200).json({ msg: "Success", userPlan, updateObj });
 });
