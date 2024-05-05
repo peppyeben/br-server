@@ -19,12 +19,13 @@ const modelMapping = {
 const updatePlan = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const { planType, growthRate, maxInvestAmount, isActive } = req.body;
+  console.log(req.body);
 
   if (!planType) {
     throw new CustomAPIError("Invalid Plan Type", 400);
   }
 
-  if (!growthRate && !maxInvestAmount) {
+  if (parseFloat(growthRate) < 0 && !maxInvestAmount) {
     throw new CustomAPIError("Invalid mods", 400);
   }
 
@@ -38,7 +39,7 @@ const updatePlan = asyncWrapper(async (req, res) => {
 
   const updateObj = {};
 
-  if (growthRate) {
+  if (parseFloat(growthRate) >= 0) {
     updateObj.growthRate = parseFloat(growthRate);
     await plan.modifyGrowthRate(updateObj.growthRate);
   }
@@ -51,6 +52,8 @@ const updatePlan = asyncWrapper(async (req, res) => {
     }
     updateObj.isActive = isActive;
   }
+
+  console.log(updateObj);
 
   const userPlan = await Model.updateOne({ _id: id }, { $set: updateObj });
   await plan.save();
