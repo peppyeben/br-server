@@ -3,8 +3,16 @@ const { CustomAPIError } = require("../errors/custom-error");
 const asyncWrapper = require("../middleware/async");
 
 const getAllAddresses = asyncWrapper(async (req, res) => {
+  const { currency = null } = req.query;
+
   const addressDoc = await Address.findOneOrCreate();
-  const allAddresses = addressDoc.getAllAddresses();
+  let allAddresses;
+
+  if (currency == null) {
+    allAddresses = addressDoc.getAllAddresses();
+  } else {
+    allAddresses = addressDoc.getAddressesByCurrency(currency);
+  }
 
   res.status(200).json({ allAddresses });
 });
