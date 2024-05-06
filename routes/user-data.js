@@ -45,6 +45,11 @@ const modifySmartLink = require("../controllers/admin/smartlink.js");
 const modifyNiche = require("../controllers/admin/niche.js");
 const modifyUserAdmin = require("../controllers/admin/modify-user.js");
 const getUserTransactionAdmin = require("../controllers/admin/get-user-transactions.js");
+const {
+  getAllAddresses,
+  addAddress,
+  deleteAddress,
+} = require("../controllers/addresses.js");
 // USERS
 
 router.route("/register").post(register);
@@ -72,6 +77,12 @@ router
 
 router.route("/mrplans").get(isLoggedIn, getAllMegaResalesPlan);
 router.route("/referrals").get(isLoggedIn, getUserReferrals);
+
+router
+  .route("/addresses")
+  .get(isLoggedIn, getAllAddresses)
+  .post(isAdminMiddleware, addAddress)
+  .delete(isAdminMiddleware, deleteAddress);
 
 router
   .route("/plans/:id")
