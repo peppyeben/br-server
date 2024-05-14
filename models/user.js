@@ -50,6 +50,11 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: { type: String, default: "" },
   resetPasswordExpires: { type: Date, default: Date.now },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationToken: { type: String, default: "" },
   accountNiche: { type: String, enum: niches, default: "" },
   accountNicheStatus: {
     type: String,

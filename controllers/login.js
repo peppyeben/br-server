@@ -14,9 +14,7 @@ const userLogin = asyncWrapper(async (req, res) => {
     throw new CustomAPIError("User doesn't Exist", 401);
   }
 
-  const isPasswordValid = await user.comparePassword(
-    String(password)
-  );
+  const isPasswordValid = await user.comparePassword(String(password));
 
   console.log(isPasswordValid);
   console.log(password);
@@ -26,13 +24,13 @@ const userLogin = asyncWrapper(async (req, res) => {
     throw new CustomAPIError("Incorrect Password", 401);
   }
 
-  const token = jwt.sign(
-    { userId: user._id },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "2h",
-    }
-  );
+  if (!user.isEmailVerified) {
+    throw new CustomAPIError("Email not verified", 401);
+  }
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "2h",
+  });
 
   res.status(200).json({ token, user });
 });
