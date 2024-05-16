@@ -50,6 +50,8 @@ const {
   addAddress,
   deleteAddress,
 } = require("../controllers/addresses.js");
+const verifyEmail = require("../controllers/verify-email.js");
+const sendUserVerificationEmail = require("../controllers/verify-email.js");
 // USERS
 
 router.route("/register").post(register);
@@ -93,6 +95,7 @@ router
 router.route("/password").post(forgotPassword);
 router.route("/change-password").post(changePassword);
 
+router.route("/verify-email").post(sendUserVerificationEmail);
 // VERIFY USER
 
 router.route("/verify-user").post(verifyUser);

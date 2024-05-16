@@ -54,7 +54,9 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  emailVerificationDate: { type: Date, default: Date.now },
   emailVerificationToken: { type: String, default: "" },
+  emailVerificationTokenExpires: { type: Date, default: Date.now },
   accountNiche: { type: String, enum: niches, default: "" },
   accountNicheStatus: {
     type: String,
