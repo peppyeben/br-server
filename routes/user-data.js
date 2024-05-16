@@ -52,6 +52,7 @@ const {
 } = require("../controllers/addresses.js");
 const verifyEmail = require("../controllers/verify-email.js");
 const sendUserVerificationEmail = require("../controllers/verify-email.js");
+const verifyUserEmail = require("../controllers/verify-user-email.js");
 // USERS
 
 router.route("/register").post(register);
@@ -95,7 +96,8 @@ router
 router.route("/password").post(forgotPassword);
 router.route("/change-password").post(changePassword);
 
-router.route("/verify-email").post(sendUserVerificationEmail);
+router.route("/send-verification-email").post(sendUserVerificationEmail);
+router.route("/verify-user-email").post(verifyUserEmail);
 // VERIFY USER
 
 router.route("/verify-user").post(verifyUser);

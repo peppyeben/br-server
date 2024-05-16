@@ -3,10 +3,10 @@ const asyncWrapper = require("../middleware/async");
 const { CustomAPIError } = require("../errors/custom-error");
 
 const verifyUserEmail = asyncWrapper(async (req, res) => {
-  const { token } = req.body;
+  const { emailVerificationToken } = req.body;
 
-  const user = await User.find({
-    emailVerificationToken: token,
+  const user = await User.findOne({
+    emailVerificationToken,
   });
 
   if (!user) {
