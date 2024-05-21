@@ -8,7 +8,12 @@ const sendUserVerificationEmail = asyncWrapper(async (req, res) => {
   const { accountEmail } = req.body;
 
   // Check if user exists
-  const user = await User.findOne({ accountEmail }).exec();
+  // const user = await User.findOne({ accountEmail }).exec();
+  const user = await User.findOne({
+    accountEmail: new RegExp("^" + accountEmail + "$", "i"),
+  }).exec();
+
+  console.log(user);
   if (!user) {
     throw new CustomAPIError("User not found", 404);
   }
@@ -31,6 +36,8 @@ const sendUserVerificationEmail = asyncWrapper(async (req, res) => {
   if (emailResult instanceof Error) {
     throw new CustomAPIError("Failed to send verification email", 500);
   }
+
+  console.log(emailResult)
 
   res
     .status(200)

@@ -2,8 +2,10 @@ const nodemailer = require("nodemailer");
 
 // Create a nodemailer transporter with your email service credentials
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
+  host: "mail.premiumdigitalaffiliate.com",
+  port: 465,
+  secure: true, // use TLS
+
   auth: {
     user: process.env.MY_EMAIL,
     pass: process.env.MY_PASS,
@@ -151,6 +153,7 @@ async function sendVerificationEmail(email, verificationToken) {
     const res = await transporter.sendMail(mailOptions);
     return res;
   } catch (error) {
+    console.log(error);
     return error;
   }
 }
